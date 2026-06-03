@@ -2,6 +2,6 @@
 
 public enum ProgressionDirection
 {
-    Increase = 1,
-    Decrease = 2
+    Increase = 0,
+    Decrease = 1
 }
