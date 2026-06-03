@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="Streakly.Api/Streakly.Api.csproj" />
+  <Project Path="Streakly.Application/Streakly.Application.csproj" />
+  <Project Path="Streakly.Core/Streakly.Core.csproj" />
+  <Project Path="Streakly.Infrastructure/Streakly.Infrastructure.csproj" />
+</Solution>

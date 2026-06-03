@@ -1,0 +1,6 @@
+@StreaklyApi_HostAddress = http://localhost:5000
+
+GET {{StreaklyApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

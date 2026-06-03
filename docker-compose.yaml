@@ -1,0 +1,18 @@
+﻿services:
+  postgres:
+    image: postgres:17
+    shm_size: "4gb"
+    container_name: Streakly2.0_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: streakly2.0
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres:/var/lib/postgresql
+
+volumes:
+  postgres:
+    driver: local
