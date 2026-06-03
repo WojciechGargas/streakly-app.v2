@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="DTO\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Security\" />
   </ItemGroup>
 
 </Project>
