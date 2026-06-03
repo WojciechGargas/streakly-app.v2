@@ -8,6 +8,7 @@ public class User(
     Email email,
     Username username,
     Password password,
+    Fullname fullname,
     UserRole role,
     DateTime createdAt,
     DateTime? lastLoggedAtUtc)
@@ -16,6 +17,7 @@ public class User(
     public Email Email { get; private set; } = email;
     public Username Username { get; private set; } = username;
     public Password Password { get; private set; } = password;
+    public Fullname Fullname { get; private set; } = fullname;
     public UserRole Role { get; private set; } = role;
     public DateTime CreatedAt { get; private set; } = createdAt;
     public DateTime? LastLoggedAtUtc { get; private set; } = lastLoggedAtUtc;
