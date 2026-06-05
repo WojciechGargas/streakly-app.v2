@@ -1,11 +1,12 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Streakly.Core.Abstractions;
 using Streakly.Infrastructure.Auth;
 using Streakly.Infrastructure.DAL;
 using Streakly.Infrastructure.Exceptions;
 using Streakly.Infrastructure.Security;
+using Streakly.Infrastructure.Time;
 
 namespace Streakly.Infrastructure;
 
@@ -21,7 +22,7 @@ public static class Extensions
         var postgresOptions = configuration.GetOptions<PostgresOptions>("postgres");
         
         var infrastructureAssembly = typeof(AppOptions).Assembly;
-        
+
         services.Configure<AppOptions>(section)
             .AddScoped<ExceptionMiddleware>()
             .AddSecurity()
@@ -29,7 +30,8 @@ public static class Extensions
             .AddPostgres(configuration)
             .AddHttpContextAccessor()
             .AddSwaggerGen()
-            .AddEndpointsApiExplorer();
+            .AddEndpointsApiExplorer()
+            .AddSingleton<IClock, Clock>();
         
         return services;
     }

@@ -18,9 +18,13 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="11.0.0-preview.4.26230.115" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="11.0.0-preview.4.26230.115" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DAL\Migrations\" />
   </ItemGroup>
 
 </Project>

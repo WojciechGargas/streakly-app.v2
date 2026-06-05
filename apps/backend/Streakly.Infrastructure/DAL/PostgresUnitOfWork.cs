@@ -18,4 +18,24 @@ public class PostgresUnitOfWork(StreaklyDbContext dbContext) : IUnitOfWork
             throw;
         }
     }
+
+    public async Task<T> ExecuteAsync<T>(Func<Task<T>> action)
+    {
+        await using var transaction = await dbContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var result = await action();
+
+            await dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return result;
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }

@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Streakly.Core.Repositories;
+using Streakly.Infrastructure.DAL.Repositories;
 
 namespace Streakly.Infrastructure.DAL;
 
@@ -17,6 +19,8 @@ internal static class Extensions
 
         services.AddDbContext<StreaklyDbContext>(x => x.UseNpgsql(options.ConnectionString));
         services.AddScoped<IUnitOfWork, PostgresUnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
         
         return services;
     }
