@@ -1,4 +1,5 @@
 using Streakly.Application;
+using Streakly.Core;
 using Streakly.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services
+    .AddCore()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddControllers();

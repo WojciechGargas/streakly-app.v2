@@ -4,6 +4,7 @@ using Streakly.Application.DTO;
 using Streakly.Application.Exceptions;
 using Streakly.Application.Security;
 using Streakly.Core.Abstractions;
+using Streakly.Core.DomainServices.Interfaces;
 using Streakly.Core.Repositories;
 
 namespace Streakly.Application.Users.Commands.SignIn;
@@ -12,7 +13,9 @@ public class SignInHandler(
     IUserRepository userRepository,
     IAuthenticator authenticator,
     IPasswordManager passwordManager,
-    ITokenStorage tokenStorage)
+    ITokenStorage tokenStorage,
+    IUserService userService,
+    IClock clock)
     : IRequestHandler<SignInCommand, JwtDto>
 {
     public async Task<JwtDto> Handle(SignInCommand request, CancellationToken cancellationToken)
@@ -22,6 +25,8 @@ public class SignInHandler(
         
         if(!passwordManager.Validate(request.Password, user.Password))
             throw new InvalidCredentialsException();
+
+        await userService.MarkAsLoggedIn(user, user, clock.CurrentTimeUtc());
         
         var jwt = authenticator.CreateToken(user.UserId,  user.Role.ToString());
         

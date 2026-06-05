@@ -21,4 +21,7 @@ public class User(
     public UserRole Role { get; private set; } = role;
     public DateTime CreatedAt { get; private set; } = createdAt;
     public DateTime? LastLoggedAtUtc { get; private set; } = lastLoggedAtUtc;
+    
+    public void MarkAsLoggedIn(DateTime loggedAtUtc)
+        => LastLoggedAtUtc = loggedAtUtc;
 }
