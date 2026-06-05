@@ -10,3 +10,12 @@ Content-Type: application/json
   "password": "secret123",
   "fullName": "Test User"
 }
+
+### Sing in
+POST {{host}}/Auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "secret123"
+}

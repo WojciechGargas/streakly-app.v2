@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Streakly.Application.Security;
+using Streakly.Application.Users.Commands.SignIn;
 using Streakly.Application.Users.Commands.SignUp;
 
 namespace Streakly.Api.Controllers;
@@ -20,5 +22,17 @@ public class AuthController(IMediator mediator) : ControllerBase
         await mediator.Send(signUpCommand);
 
         return Created();
+    }
+
+    [HttpPost("sign-in")]
+    public async Task<ActionResult> SignIn(SignInRequest request)
+    {
+        var signInCommand = new SignInCommand(
+            request.Email,
+            request.Password);
+        
+        var jwt = await mediator.Send(signInCommand);
+        
+        return Ok(jwt);
     }
 }
