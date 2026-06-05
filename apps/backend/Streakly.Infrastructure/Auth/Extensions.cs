@@ -14,7 +14,6 @@ internal static class Extensions
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<AuthOptions>(configuration.GetRequiredSection(SectionName));
-        services.AddSingleton<ITokenStorage, HttpContextTokenStorage>();
         var options = configuration.GetOptions<AuthOptions>(SectionName);
 
         services

@@ -13,7 +13,6 @@ public class SignInHandler(
     IUserRepository userRepository,
     IAuthenticator authenticator,
     IPasswordManager passwordManager,
-    ITokenStorage tokenStorage,
     IUserService userService,
     IClock clock)
     : IRequestHandler<SignInCommand, JwtDto>
@@ -29,8 +28,6 @@ public class SignInHandler(
         await userService.MarkAsLoggedIn(user, user, clock.CurrentTimeUtc());
         
         var jwt = authenticator.CreateToken(user.UserId,  user.Role.ToString());
-        
-        tokenStorage.Set(jwt);
         
         return jwt;
     }
