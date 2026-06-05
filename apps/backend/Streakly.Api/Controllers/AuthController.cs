@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Streakly.Application.Security;
+using Streakly.Application.Users.Commands.ConfirmEmail;
 using Streakly.Application.Users.Commands.SignIn;
 using Streakly.Application.Users.Commands.SignUp;
 
@@ -34,5 +35,21 @@ public class AuthController(IMediator mediator) : ControllerBase
         var jwt = await mediator.Send(signInCommand);
         
         return Ok(jwt);
+    }
+
+    [HttpPost("confirm-email")]
+    public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest request)
+    {
+        await  mediator.Send(new ConfirmEmailCommand(request.Token));
+        
+        return NoContent();
+    }
+
+    [HttpGet("confirm-email")]
+    public async Task<ActionResult> ConfirmEmailFromLink(string token)
+    {
+        await  mediator.Send(new ConfirmEmailCommand(token));
+        
+        return Content("Email confirmed. You can close this page.");
     }
 }

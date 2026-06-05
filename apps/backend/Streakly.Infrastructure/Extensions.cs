@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Streakly.Core.Abstractions;
 using Streakly.Infrastructure.Auth;
 using Streakly.Infrastructure.DAL;
+using Streakly.Infrastructure.Emails;
 using Streakly.Infrastructure.Exceptions;
 using Streakly.Infrastructure.Security;
 using Streakly.Infrastructure.Time;
@@ -27,6 +28,7 @@ public static class Extensions
             .AddScoped<ExceptionMiddleware>()
             .AddSecurity()
             .AddAuth(configuration)
+            .AddEmails(configuration)
             .AddPostgres(configuration)
             .AddHttpContextAccessor()
             .AddSwaggerGen()

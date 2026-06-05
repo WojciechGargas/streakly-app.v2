@@ -11,7 +11,8 @@ public class User(
     Fullname fullname,
     UserRole role,
     DateTime createdAt,
-    DateTime? lastLoggedAtUtc)
+    DateTime? lastLoggedAtUtc,
+    bool isEmailConfirmed = false)
 {
     public UserId UserId { get; private set; } = userId;
     public Email Email { get; private set; } = email;
@@ -21,7 +22,17 @@ public class User(
     public UserRole Role { get; private set; } = role;
     public DateTime CreatedAt { get; private set; } = createdAt;
     public DateTime? LastLoggedAtUtc { get; private set; } = lastLoggedAtUtc;
+    public bool IsEmailConfirmed { get; private set; } = isEmailConfirmed;
     
     public void MarkAsLoggedIn(DateTime loggedAtUtc)
         => LastLoggedAtUtc = loggedAtUtc;
+    
+    public void MarkEmailAsConfirmed()
+        => IsEmailConfirmed = true;
+
+    public void ChangeEmail(string newEmail)
+    {
+        Email = new Email(newEmail);
+        IsEmailConfirmed = false;
+    }
 }

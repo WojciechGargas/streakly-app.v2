@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Streakly.Application.Emails;
 using Streakly.Application.Security;
 using Streakly.Core.Abstractions;
 using Streakly.Core.Entities;
@@ -7,11 +8,13 @@ using Streakly.Core.Exceptions;
 using Streakly.Core.Repositories;
 using Streakly.Core.ValueObjects;
 
+
 namespace Streakly.Application.Users.Commands.SignUp;
 
 public class SignUpHandler(
     IUserRepository userRepository,
     IPasswordManager passwordManager,
+    IEmailConfirmationService emailConfirmationService,
     IClock clock)
     : IRequestHandler<SignUpCommand>
 {
@@ -39,5 +42,6 @@ public class SignUpHandler(
             fullname, role, clock.CurrentTimeUtc(), null);
 
         await userRepository.AddUserAsync(user);
+        await emailConfirmationService.SendRegistrationConfirmationAsync(user.UserId, user.Email);
     }
 }

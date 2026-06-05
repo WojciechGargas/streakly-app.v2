@@ -16,6 +16,23 @@ public class UserService(IUserUpdatePolicy userUpdatePolicy) : IUserService
         return Task.CompletedTask;
     }
 
+    public Task MarkEmailAsConfirmed(User requestedBy, User userToUpdate)
+    {
+        EnsureCanUpdate(requestedBy, userToUpdate);
+        userToUpdate.MarkEmailAsConfirmed();
+        
+        return Task.CompletedTask;
+    }
+
+    public Task ChangeEmail(User requestedBy, User userToUpdate, string newEmail)
+    {
+        EnsureCanUpdate(requestedBy, userToUpdate);
+        userToUpdate.ChangeEmail(newEmail);
+        userToUpdate.MarkEmailAsConfirmed();
+        
+        return Task.CompletedTask;
+    }
+
     private void EnsureCanUpdate(User requestedBy, User userToUpdate)
     {
         if (!userUpdatePolicy.CanUpdate(requestedBy, userToUpdate))

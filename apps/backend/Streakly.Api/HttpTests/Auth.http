@@ -19,3 +19,14 @@ Content-Type: application/json
   "email": "test@example.com",
   "password": "secret123"
 }
+
+### Sign up with real email confirmation
+POST {{host}}/Auth/sign-up
+Content-Type: application/json
+
+{
+  "email": "gargas.w@gmail.com",
+  "userName": "Wojtek",
+  "password": "secret123",
+  "fullName": "Wojciech Gargas"
+}

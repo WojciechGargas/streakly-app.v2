@@ -4,6 +4,11 @@ using Streakly.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddJsonFile("appsettings.Development.local.json", optional: true, reloadOnChange: true);
+}
+
 builder.Services.AddOpenApi();
 
 builder.Services

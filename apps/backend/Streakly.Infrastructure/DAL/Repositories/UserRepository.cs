@@ -3,6 +3,7 @@ using Streakly.Core.Entities;
 using Streakly.Core.Repositories;
 using Streakly.Core.ValueObjects;
 
+
 namespace Streakly.Infrastructure.DAL.Repositories;
 
 public class UserRepository(StreaklyDbContext dbContext) : IUserRepository

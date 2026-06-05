@@ -63,6 +63,10 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.LastLoggedAtUtc)
             .HasColumnName("last_logged_at_utc");
+        
+        builder.Property(x => x.IsEmailConfirmed)
+            .HasColumnName("is_email_confirmed")
+            .IsRequired();
 
         builder.HasIndex(x => x.Email)
             .IsUnique();
