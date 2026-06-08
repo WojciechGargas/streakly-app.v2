@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ internal static class Extensions
     public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<AuthOptions>(configuration.GetRequiredSection(SectionName));
+        services.AddScoped<ITokenRevocationService, TokenRevocationService>();
         var options = configuration.GetOptions<AuthOptions>(SectionName);
 
         services
@@ -32,6 +35,28 @@ internal static class Extensions
                     ValidIssuer = options.Issuer,
                     ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.SigningKey))
+                };
+
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var tokenId = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Jti);
+
+                        if (string.IsNullOrWhiteSpace(tokenId))
+                        {
+                            context.Fail("Token not found");
+                            return;
+                        }
+
+                        var tokenRevocationService = context.HttpContext.RequestServices
+                            .GetRequiredService<ITokenRevocationService>();
+
+                        if (await tokenRevocationService.IsTokenRevokedAsync(tokenId))
+                        {
+                            context.Fail("Token has been revoked");
+                        }
+                    }
                 };
             });
         

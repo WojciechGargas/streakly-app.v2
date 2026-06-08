@@ -1,7 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Streakly.Api.Auth;
 using Streakly.Application.Security;
 using Streakly.Application.Users.Commands.ConfirmEmail;
+using Streakly.Application.Users.Commands.Logout;
 using Streakly.Application.Users.Commands.SignIn;
 using Streakly.Application.Users.Commands.SignUp;
 
@@ -51,5 +54,19 @@ public class AuthController(IMediator mediator) : ControllerBase
         await  mediator.Send(new ConfirmEmailCommand(token));
         
         return Content("Email confirmed. You can close this page.");
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout()
+    {
+        var command = new LogoutCommand(
+            User.GetUserIdOrThrow(),
+            User.GetTokenIdOrThrow(),
+            User.GetExpirationUtcOrThrow());
+        
+        await mediator.Send(command);
+        
+        return NoContent();
     }
 }
