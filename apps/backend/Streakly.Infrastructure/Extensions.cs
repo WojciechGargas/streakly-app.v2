@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Streakly.Core.Abstractions;
@@ -6,6 +8,7 @@ using Streakly.Infrastructure.Auth;
 using Streakly.Infrastructure.DAL;
 using Streakly.Infrastructure.Emails;
 using Streakly.Infrastructure.Exceptions;
+using Streakly.Infrastructure.Hangfire;
 using Streakly.Infrastructure.Security;
 using Streakly.Infrastructure.Time;
 
@@ -24,12 +27,19 @@ public static class Extensions
         
         var infrastructureAssembly = typeof(AppOptions).Assembly;
 
+        services.Configure<HangfireOptions>(configuration.GetSection(HangfireOptions.SectionName));
         services.Configure<AppOptions>(section)
             .AddScoped<ExceptionMiddleware>()
             .AddSecurity()
             .AddAuth(configuration)
             .AddEmails(configuration)
             .AddPostgres(configuration)
+            .AddHangfire(config =>
+            {
+                config.UsePostgreSqlStorage(storageOptions =>
+                    storageOptions.UseNpgsqlConnection(postgresOptions.ConnectionString));
+            })
+            .AddHangfireServer()
             .AddHttpContextAccessor()
             .AddSwaggerGen()
             .AddEndpointsApiExplorer()
@@ -40,11 +50,27 @@ public static class Extensions
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
+        var hangfireOptions = app.Services
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<HangfireOptions>>()
+            .Value;
+        var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
+        
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseAuthentication();
         app.UseAuthorization();
+        recurringJobManager.AddOrUpdate<RevokedTokensCleanupJob>(
+            "cleanup-revoked-tokens",
+            job => job.ExecuteAsync(),
+            hangfireOptions.CleanupCron);
+        if (hangfireOptions.DashboardEnabled)
+        {
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = [new HangfireDashboardAuthorizationFilter()]
+            });
+        }
         app.MapControllers();
         
         return app;
