@@ -10,6 +10,7 @@ using Streakly.Infrastructure.Emails;
 using Streakly.Infrastructure.Exceptions;
 using Streakly.Infrastructure.Hangfire;
 using Streakly.Infrastructure.Security;
+using Streakly.Infrastructure.Seed;
 using Streakly.Infrastructure.Time;
 
 namespace Streakly.Infrastructure;
@@ -24,10 +25,10 @@ public static class Extensions
         var allowedOrigins = configuration.GetSection("cors:allowedOrigins").Get<string[]>() ?? [];
 
         var postgresOptions = configuration.GetOptions<PostgresOptions>("postgres");
-        
-        var infrastructureAssembly = typeof(AppOptions).Assembly;
 
         services.Configure<HangfireOptions>(configuration.GetSection(HangfireOptions.SectionName));
+        services.Configure<AdminSeedOptions>(configuration.GetSection(AdminSeedOptions.SectionName));
+        
         services.Configure<AppOptions>(section)
             .AddScoped<ExceptionMiddleware>()
             .AddSecurity()
@@ -40,10 +41,22 @@ public static class Extensions
                     storageOptions.UseNpgsqlConnection(postgresOptions.ConnectionString));
             })
             .AddHangfireServer()
+            .AddHostedService<AdminSeederHostedService>()
             .AddHttpContextAccessor()
             .AddSwaggerGen()
             .AddEndpointsApiExplorer()
             .AddSingleton<IClock, Clock>();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("cors", policy =>
+            {
+                policy
+                    .WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
         
         return services;
     }
@@ -58,6 +71,7 @@ public static class Extensions
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseSwagger();
         app.UseSwaggerUI();
+        app.UseCors("cors");
         app.UseAuthentication();
         app.UseAuthorization();
         recurringJobManager.AddOrUpdate<RevokedTokensCleanupJob>(
