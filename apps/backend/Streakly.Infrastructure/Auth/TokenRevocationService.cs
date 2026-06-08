@@ -2,6 +2,7 @@
 using Streakly.Application.Security;
 using Streakly.Core.Abstractions;
 using Streakly.Infrastructure.DAL;
+using Streakly.Infrastructure.DAL.Entities;
 
 namespace Streakly.Infrastructure.Auth;
 

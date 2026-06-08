@@ -1,4 +1,4 @@
-﻿namespace Streakly.Infrastructure.Auth;
+﻿namespace Streakly.Infrastructure.DAL.Entities;
 
 public sealed class RevokedToken
 {

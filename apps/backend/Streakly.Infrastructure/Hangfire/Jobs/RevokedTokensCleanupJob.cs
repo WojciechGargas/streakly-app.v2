@@ -2,7 +2,7 @@
 using Streakly.Core.Abstractions;
 using Streakly.Infrastructure.DAL;
 
-namespace Streakly.Infrastructure.Auth;
+namespace Streakly.Infrastructure.Hangfire.Jobs;
 
 public sealed class RevokedTokensCleanupJob(StreaklyDbContext dbContext, IClock clock)
 {

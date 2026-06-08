@@ -9,6 +9,8 @@ using Streakly.Infrastructure.DAL;
 using Streakly.Infrastructure.Emails;
 using Streakly.Infrastructure.Exceptions;
 using Streakly.Infrastructure.Hangfire;
+using Streakly.Infrastructure.Hangfire.Jobs;
+using Streakly.Infrastructure.Hangfire.Jobs.Options;
 using Streakly.Infrastructure.Security;
 using Streakly.Infrastructure.Seed;
 using Streakly.Infrastructure.Time;
@@ -27,6 +29,7 @@ public static class Extensions
         var postgresOptions = configuration.GetOptions<PostgresOptions>("postgres");
 
         services.Configure<HangfireOptions>(configuration.GetSection(HangfireOptions.SectionName));
+        services.Configure<UserCleanupOptions>(configuration.GetSection(UserCleanupOptions.SectionName));
         services.Configure<AdminSeedOptions>(configuration.GetSection(AdminSeedOptions.SectionName));
         
         services.Configure<AppOptions>(section)
@@ -66,6 +69,11 @@ public static class Extensions
         var hangfireOptions = app.Services
             .GetRequiredService<Microsoft.Extensions.Options.IOptions<HangfireOptions>>()
             .Value;
+        
+        var userCleanupOptions = app.Services
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<UserCleanupOptions>>()
+            .Value;
+        
         var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
         
         app.UseMiddleware<ExceptionMiddleware>();
@@ -78,6 +86,10 @@ public static class Extensions
             "cleanup-revoked-tokens",
             job => job.ExecuteAsync(),
             hangfireOptions.CleanupCron);
+        recurringJobManager.AddOrUpdate<UnconfirmedUsersCleanupJob>(
+            "cleanup-unconfirmed-users",
+            job => job.ExecuteAsync(),
+            userCleanupOptions.CleanupCron);
         if (hangfireOptions.DashboardEnabled)
         {
             app.UseHangfireDashboard("/hangfire", new DashboardOptions

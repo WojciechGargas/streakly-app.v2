@@ -24,6 +24,9 @@ public class SignInHandler(
         
         if(!passwordManager.Validate(request.Password, user.Password))
             throw new InvalidCredentialsException();
+        
+        if(!user.IsEmailConfirmed)
+            throw new EmailNotConfirmedException();
 
         await userService.MarkAsLoggedIn(user, user, clock.CurrentTimeUtc());
         

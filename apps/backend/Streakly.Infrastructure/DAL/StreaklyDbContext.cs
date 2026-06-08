@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Streakly.Core.Entities;
-using Streakly.Infrastructure.Auth;
+using Streakly.Infrastructure.DAL.Entities;
 
 namespace Streakly.Infrastructure.DAL;
 
