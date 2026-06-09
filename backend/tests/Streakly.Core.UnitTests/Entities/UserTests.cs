@@ -43,4 +43,75 @@ public class UserTests
         user.LastLoggedAtUtc.ShouldBeNull();
         user.IsEmailConfirmed.ShouldBeFalse();
     }
+    
+    [Fact]
+    public void MarkAsLoggedIn_ValidDate_UpdatesLastLoggedAtUtc()
+    {
+        // Arrange
+        var user = CreateUser();
+        var loggedAtUtc = DateTime.UtcNow;
+
+        // Act
+        user.MarkAsLoggedIn(loggedAtUtc);
+
+        // Assert
+        user.LastLoggedAtUtc.ShouldBe(loggedAtUtc);
+    }
+
+    [Fact]
+    public void MarkEmailAsConfirmed_UserEmailNotConfirmed_SetsEmailAsConfirmed()
+    {
+        // Arrange
+        var user = CreateUser();
+
+        // Act
+        user.MarkEmailAsConfirmed();
+
+        // Assert
+        user.IsEmailConfirmed.ShouldBeTrue();
+    }
+    
+    [Fact]
+    public void ChangeEmail_ValidEmail_ChangesEmail()
+    {
+        // Arrange
+        var user = CreateUser();
+        var newEmail = "new@example.com";
+
+        // Act
+        user.ChangeEmail(newEmail);
+
+        // Assert
+        user.Email.ShouldBe(new Email(newEmail));
+    }
+    
+    [Fact]
+    public void ChangeEmail_ValidEmail_ResetsEmailConfirmation()
+    {
+        // Arrange
+        var user = CreateUser(isEmailConfirmed: true);
+        var newEmail = "new@example.com";
+
+        // Act
+        user.ChangeEmail(newEmail);
+
+        // Assert
+        user.IsEmailConfirmed.ShouldBeFalse();
+    }
+    
+    private static User CreateUser(
+        DateTime? lastLoggedAtUtc = null,
+        bool isEmailConfirmed = false)
+    {
+        return new User(
+            new UserId(Guid.NewGuid()),
+            new Email("user@example.com"),
+            new Username("user"),
+            new Password("password"),
+            new Fullname("fullname example"),
+            UserRole.User,
+            DateTime.UtcNow,
+            lastLoggedAtUtc,
+            isEmailConfirmed);
+    }
 }
