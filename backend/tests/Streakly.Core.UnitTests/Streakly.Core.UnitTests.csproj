@@ -23,4 +23,9 @@
       <ProjectReference Include="..\..\src\Streakly.Core\Streakly.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ValueObjects\Habit\" />
+      <Folder Include="ValueObjects\User\" />
+    </ItemGroup>
+
 </Project>

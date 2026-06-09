@@ -1,5 +1,6 @@
 ﻿using Streakly.Core.Entities;
 using Streakly.Core.ValueObjects;
+using Streakly.Core.ValueObjects.User;
 
 namespace Streakly.Core.Repositories;
 

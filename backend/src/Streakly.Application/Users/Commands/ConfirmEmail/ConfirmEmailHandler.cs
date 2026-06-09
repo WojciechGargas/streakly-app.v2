@@ -5,6 +5,7 @@ using Streakly.Core.DomainServices.Interfaces;
 using Streakly.Core.Exceptions;
 using Streakly.Core.Repositories;
 using Streakly.Core.ValueObjects;
+using Streakly.Core.ValueObjects.User;
 
 namespace Streakly.Application.Users.Commands.ConfirmEmail;
 

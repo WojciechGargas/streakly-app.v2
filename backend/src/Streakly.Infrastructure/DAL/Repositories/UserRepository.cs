@@ -2,6 +2,7 @@
 using Streakly.Core.Entities;
 using Streakly.Core.Repositories;
 using Streakly.Core.ValueObjects;
+using Streakly.Core.ValueObjects.User;
 
 
 namespace Streakly.Infrastructure.DAL.Repositories;

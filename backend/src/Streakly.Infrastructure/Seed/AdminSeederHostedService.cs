@@ -7,6 +7,7 @@ using Streakly.Core.Abstractions;
 using Streakly.Core.Entities;
 using Streakly.Core.Enums;
 using Streakly.Core.ValueObjects;
+using Streakly.Core.ValueObjects.User;
 using Streakly.Infrastructure.DAL;
 
 namespace Streakly.Infrastructure.Seed;

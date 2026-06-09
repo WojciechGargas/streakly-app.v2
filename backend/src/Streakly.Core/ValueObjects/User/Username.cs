@@ -1,6 +1,6 @@
 ﻿using Streakly.Core.Exceptions;
 
-namespace Streakly.Core.ValueObjects;
+namespace Streakly.Core.ValueObjects.User;
 
 public sealed record Username
 {

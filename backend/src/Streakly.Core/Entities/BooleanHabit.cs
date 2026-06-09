@@ -1,5 +1,6 @@
 ﻿using Streakly.Core.ValueObjects;
 using Streakly.Core.ValueObjects.Habit;
+using Streakly.Core.ValueObjects.User;
 
 namespace Streakly.Core.Entities;
 
