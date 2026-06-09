@@ -7,13 +7,13 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["apps/backend/Streakly.Core/Streakly.Core.csproj", "apps/backend/Streakly.Core/"]
-COPY ["apps/backend/Streakly.Application/Streakly.Application.csproj", "apps/backend/Streakly.Application/"]
-COPY ["apps/backend/Streakly.Infrastructure/Streakly.Infrastructure.csproj", "apps/backend/Streakly.Infrastructure/"]
-COPY ["apps/backend/Streakly.Api/Streakly.Api.csproj", "apps/backend/Streakly.Api/"]
-RUN dotnet restore "apps/backend/Streakly.Api/Streakly.Api.csproj"
+COPY ["backend/src/Streakly.Core/Streakly.Core.csproj", "backend/src/Streakly.Core/"]
+COPY ["backend/src/Streakly.Application/Streakly.Application.csproj", "backend/src/Streakly.Application/"]
+COPY ["backend/src/Streakly.Infrastructure/Streakly.Infrastructure.csproj", "backend/src/Streakly.Infrastructure/"]
+COPY ["backend/src/Streakly.Api/Streakly.Api.csproj", "backend/src/Streakly.Api/"]
+RUN dotnet restore "backend/src/Streakly.Api/Streakly.Api.csproj"
 COPY . .
-WORKDIR "/src/apps/backend/Streakly.Api"
+WORKDIR "/src/backend/src/Streakly.Api"
 RUN dotnet build "./Streakly.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

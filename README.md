@@ -4,8 +4,8 @@ Full-stack habit and task tracking application that helps users manage daily act
 
 ## Structure
 
-- `apps/backend/Streakly.Api` - ASP.NET Core API
-- `apps/backend/Streakly.Application` - application layer
-- `apps/backend/Streakly.Core` - domain/core layer
-- `apps/backend/Streakly.Infrastructure` - infrastructure layer
-- `tests` - test projects
+- `backend/src/Streakly.Api` - ASP.NET Core API
+- `backend/src/Streakly.Application` - application layer
+- `backend/src/Streakly.Core` - domain/core layer
+- `backend/src/Streakly.Infrastructure` - infrastructure layer
+- `backend/tests` - test projects
