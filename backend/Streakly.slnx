@@ -3,4 +3,8 @@
   <Project Path="src/Streakly.Application/Streakly.Application.csproj" />
   <Project Path="src/Streakly.Core/Streakly.Core.csproj" />
   <Project Path="src/Streakly.Infrastructure/Streakly.Infrastructure.csproj" />
+  <Project Path="tests/Streakly.Api.FunctionalTests/Streakly.Api.FunctionalTests.csproj" />
+  <Project Path="tests/Streakly.Application.UnitTests/Streakly.Application.UnitTests.csproj" />
+  <Project Path="tests/Streakly.Core.UnitTests/Streakly.Core.UnitTests.csproj" />
+  <Project Path="tests/Streakly.Infrastructure.IntegrationTests/Streakly.Infrastructure.IntegrationTests.csproj" />
 </Solution>
